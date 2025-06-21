@@ -8,11 +8,19 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const PORT = 1729;
+const players = {};
 
 app.use(express.static('public'));
 
 io.on('connection', (socket) => {
-    console.log('🎉 クライアント接続:', socket.id);
+    const isAdmin = socket.handshake.query.admin === 'true';
+
+    if (!isAdmin) {
+        players[socket.id] = true;
+        io.emit('updatePlayerList', Object.keys(players));
+    } else {
+        console.log(`👑 管理者接続: ${socket.id}`);
+    }
 
     socket.on('sceneChange', (sceneName) => {
         console.log('📺 シーン変更要求:', sceneName);
@@ -20,7 +28,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('👋 切断:', socket.id);
+        if (!isAdmin) {
+            delete players[socket.id];
+            io.emit('updatePlayerList', Object.keys(players));
+        } else {
+            console.log(`👑 管理者切断: ${socket.id}`);
+        }
     });
 });
 

@@ -37,14 +37,27 @@
       <h1>🎮 シーン切り替え</h1>
       <button onclick="changeScene('space')">🌌 宇宙へ</button>
       <button onclick="changeScene('earth')">🌏 地球へ</button>
+
+      <h2>👥 接続中のプレイヤー</h2>
+      <ul id="player-list"></ul>
     
       <script>
-        const socket = io();
+        const socket = io({ query: { admin: 'true' } });
         
         function changeScene(scene) {
           console.log('🔘 シーン切り替え:', scene);
           socket.emit('sceneChange', scene);
         }
+
+        socket.on('updatePlayerList', (playerIds) => {
+          const list = document.getElementById('player-list');
+          list.innerHTML = '';
+          playerIds.forEach(id => {
+            const li = document.createElement('li');
+            li.textContent = id;
+            list.appendChild(li);
+          });
+        });
       </script>
     </body>
 </html>
