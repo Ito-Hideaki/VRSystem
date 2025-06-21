@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>With &lt;3 from 2J</title>
+        <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="aframe-stereo-component.min.js"></script>
+        <style>
+            body {margin: 0;}
+            #status {position: absolute; top: 10px; left: 10px; background: #0008; color: #fff; padding: 5px 10px; font-size: 14px;}
+    </style>
+    </head>
+    <body>
+        <div id="status">📡 接続中...</div>
+        <a-scene>
+            <a-assets>
+                <img id="space" src="sky.jpg"/>
+                <img id="earth" src="ocean.jpg"/>
+            </a-assets>
+
+            <a-entity camera look-controls position="0 0 0" stereocam="eye:left;"></a-entity>
+
+            <a-entity id="sphere-left"
+          geometry="primitive: sphere; radius: 5000;"
+          material="shader: flat; src: #space; side: back;"
+          scale="-1 1 1"
+          stereo="eye:left">
+            </a-entity>
+
+            <a-entity id="sphere-right"
+          geometry="primitive: sphere; radius: 5000;"
+          material="shader: flat; src: #space; side: back;"
+          scale="-1 1 1"
+          stereo="eye:right">
+            </a-entity>
+
+        </a-scene>
+        <script>
+            const socket = io();
+            const sphereLeft = document.querySelector('#sphere-left');
+            const sphereRight = document.querySelector('#sphere-right');
+            const status = document.querySelector('#status');
+              
+            socket.on('connect', () => {
+                status.textContent = '✅ 接続成功！';
+            });
+      
+            socket.on('disconnect', () => {
+                status.textContent = '❌ 接続が切れました';
+            });
+      
+            socket.on('sceneUpdate', (sceneName) => {
+                console.log('🔁 シーン更新:', sceneName);
+                let textureId = sceneName === 'space' ? '#space' : '#earth';
+                sphereLeft.setAttribute('material', 'src', textureId);
+                sphereRight.setAttribute('material', 'src', textureId);
+            });
+        </script>
+    </body>
+</html>

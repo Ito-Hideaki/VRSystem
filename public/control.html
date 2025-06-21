@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+      <meta charset="UTF-8" />
+      <title>操作パネル</title>
+      <script src="/socket.io/socket.io.js"></script>
+      <style>
+        body {
+          font-family: sans-serif;
+          background-color: #111;
+          color: #fff;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          margin: 0;
+        }
+        h1 { margin-bottom: 1em; }
+        button {
+          font-size: 1.5em;
+          margin: 0.5em;
+          padding: 0.5em 1.5em;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          background-color: #00aaff;
+          color: white;
+          transition: background-color 0.2s;
+        }
+        button:hover {
+          background-color: #0077aa;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>🎮 シーン切り替え</h1>
+      <button onclick="changeScene('space')">🌌 宇宙へ</button>
+      <button onclick="changeScene('earth')">🌏 地球へ</button>
+    
+      <script>
+        const socket = io();
+        
+        function changeScene(scene) {
+          console.log('🔘 シーン切り替え:', scene);
+          socket.emit('sceneChange', scene);
+        }
+      </script>
+    </body>
+</html>
