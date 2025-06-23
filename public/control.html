@@ -49,15 +49,16 @@
           socket.emit('sceneChange', scene);
         }
 
-        socket.on('updatePlayerList', (playerIds) => {
+        socket.on('updatePlayerList', (playerUuids) => {
           const list = document.getElementById('player-list');
           list.innerHTML = '';
-          playerIds.forEach(id => {
+          playerUuids.forEach(uuid => {
             const li = document.createElement('li');
-            li.textContent = id;
+            li.textContent = uuid;
             list.appendChild(li);
           });
         });
+
       </script>
     </body>
 </html>
