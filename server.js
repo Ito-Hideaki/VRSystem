@@ -9,6 +9,7 @@ const io = socketIo(server);
 
 const PORT = 1729;
 const players = {}; // uuid => { socketId, connectedAt }
+let boxHp = 100;
 
 app.use(express.static('public'));
 
@@ -27,6 +28,7 @@ io.on('connection', (socket) => {
             socketId: socket.id,
             connectedAt: new Date(),
         };
+        socket.emit("updateBoxHp", boxHp);
 
         console.log(`🎮 プレイヤー接続: UUID=${uuid}, socketId=${socket.id}`);
         io.emit('updatePlayerList', Object.keys(players));
@@ -37,6 +39,14 @@ io.on('connection', (socket) => {
     socket.on('sceneChange', (sceneName) => {
         console.log('📺 シーン変更要求:', sceneName);
         io.emit('sceneUpdate', sceneName);
+    });
+
+    socket.on('hitBox', () => {
+        if (!isAdmin && boxHp > 0) {
+            boxHp -= 10;
+            console.log(`💥 box が攻撃された！残HP: ${boxHp}`);
+            io.emit('updateBoxHp', boxHp);
+        }
     });
 
     socket.on('disconnect', () => {

@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+}
+
+#status {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #0008;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 14px;
+}
