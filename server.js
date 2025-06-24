@@ -30,7 +30,14 @@ io.on('connection', (socket) => {
             socketId: socket.id,
             connectedAt: new Date(),
         };
-        socket.emit("updateBoxHp", boxHp);
+
+        // Send current box state to the new client only
+        socket.emit('spawnBox', {
+            id: 'movingBox',
+            position: boxPos,
+            color: '#4CC3D9'
+        });
+        socket.emit('updateBoxHp', boxHp);
 
         console.log(`🎮 プレイヤー接続: UUID=${uuid}, socketId=${socket.id}`);
         io.emit('updatePlayerList', Object.keys(players));
@@ -48,22 +55,33 @@ io.on('connection', (socket) => {
             boxHp -= 10;
             console.log(`💥 box が攻撃された！残HP: ${boxHp}`);
             io.emit('updateBoxHp', boxHp);
+
+            // If destroyed, respawn after a delay
+            if (boxHp <= 0) {
+                setTimeout(() => {
+                    boxHp = 100;
+                    boxPos = { x: 0, y: 1, z: -3 }; // or randomize if you want
+                    io.emit('spawnBox', {
+                        id: 'movingBox',
+                        position: boxPos,
+                        color: '#4CC3D9'
+                    });
+                    io.emit('updateBoxHp', boxHp);
+                }, 2000); // 2 seconds respawn delay
+            }
         }
     });
 
-    // When a new box should appear:
-    const boxData = {
-        id: 'movingBox', // or a unique id if you want multiple boxes
-        position: { x: 0, y: 1, z: -3 },
-        color: '#4CC3D9'
-    };
-    socket.emit('spawnBox', boxData); // For just this client
-    // or
-    io.emit('spawnBox', boxData); // For all clients
+    socket.on('startDamage', () => {
+        io.emit('boxColor', 'red');
+    });
+
+    socket.on('stopDamage', () => {
+        io.emit('boxColor', '#4CC3D9');
+    });
 
     socket.on('disconnect', () => {
         if (!isAdmin) {
-            // UUIDを socket.id から逆引きして削除
             const uuidToDelete = Object.keys(players).find(key => players[key].socketId === socket.id);
             if (uuidToDelete) {
                 delete players[uuidToDelete];
@@ -76,6 +94,7 @@ io.on('connection', (socket) => {
     });
 });
 
+// Move the box on the server and broadcast position
 setInterval(() => {
     if (boxPos.x > 2 || boxPos.x < -2) direction *= -1;
     boxPos.x += 0.05 * direction;

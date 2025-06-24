@@ -6,10 +6,8 @@
     <title>With &lt;3 from 2J</title>
     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="scripts/aframe-stereo-component.min.js"></script>
     <script src="scripts/player.js"></script>
     <link rel="stylesheet" href="styles/index.css">
-
 </head>
 
 <body>
@@ -20,12 +18,15 @@
             <img id="earth" src="assets/ocean.jpg" />
         </a-assets>
 
-        <a-entity camera look-controls position="0 0 0" stereocam="eye:left;" raycaster="objects: .clickable">
+        <a-entity camera look-controls raycaster="objects: .clickable">
             <a-cursor color="red"></a-cursor>
+            <a-entity id="hud">
+                <a-text id="damageText" value="Damage: 0" color="yellow" align="center"></a-text>
+            </a-entity>
         </a-entity>
 
         <a-entity id="sphere" geometry="primitive: sphere; radius: 5000;"
-            material="shader: flat; src: #space; side: back;" scale="-1 1 1" stereo="eye:left">
+            material="shader: flat; src: #space; side: back;" scale="-1 1 1">
         </a-entity>
 
     </a-scene>
