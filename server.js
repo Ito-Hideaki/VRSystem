@@ -10,6 +10,8 @@ const io = socketIo(server);
 const PORT = 1729;
 const players = {}; // uuid => { socketId, connectedAt }
 let boxHp = 100;
+let boxPos = { x: 0, y: 1, z: -3 };
+let direction = 1;
 
 app.use(express.static('public'));
 
@@ -49,6 +51,16 @@ io.on('connection', (socket) => {
         }
     });
 
+    // When a new box should appear:
+    const boxData = {
+        id: 'movingBox', // or a unique id if you want multiple boxes
+        position: { x: 0, y: 1, z: -3 },
+        color: '#4CC3D9'
+    };
+    socket.emit('spawnBox', boxData); // For just this client
+    // or
+    io.emit('spawnBox', boxData); // For all clients
+
     socket.on('disconnect', () => {
         if (!isAdmin) {
             // UUIDを socket.id から逆引きして削除
@@ -63,6 +75,12 @@ io.on('connection', (socket) => {
         }
     });
 });
+
+setInterval(() => {
+    if (boxPos.x > 2 || boxPos.x < -2) direction *= -1;
+    boxPos.x += 0.05 * direction;
+    io.emit('boxPosition', boxPos);
+}, 50);
 
 server.listen(PORT, () => {
     console.log(`🚀 サーバ起動 http://localhost:${PORT}`);

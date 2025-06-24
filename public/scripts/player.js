@@ -35,13 +35,29 @@ document.addEventListener('DOMContentLoaded', () => {
         sphere.setAttribute('material', 'src', textureId);
     });
 
-    let direction = 1;
-    const pos = box.getAttribute('position');
-    setInterval(() => {
-        if (pos.x > 2 || pos.x < -2) direction *= -1;
-        pos.x += 0.05 * direction;
+    socket.on('boxPosition', (pos) => {
         box.setAttribute('position', pos);
-    }, 50);
+    });
+
+    socket.on('spawnBox', (boxData) => {
+        // Remove old box if it exists
+        const oldBox = document.querySelector(`#${boxData.id}`);
+        if (oldBox) oldBox.parentNode.removeChild(oldBox);
+
+        // Create new box
+        const scene = document.querySelector('a-scene');
+        const box = document.createElement('a-box');
+        box.setAttribute('id', boxData.id);
+        box.setAttribute('class', 'clickable');
+        box.setAttribute('position', boxData.position);
+        box.setAttribute('color', boxData.color);
+        box.setAttribute('depth', 1);
+        box.setAttribute('height', 1);
+        box.setAttribute('width', 1);
+        box.setAttribute('rotation', '0 45 0');
+        box.setAttribute('damage-on-hover', '');
+        scene.appendChild(box);
+    });
 });
 
 // A-Frame component registration should remain outside DOMContentLoaded
