@@ -19,6 +19,10 @@ io.on('connection', (socket) => {
     const isAdmin = socket.handshake.query.admin === 'true';
     const uuid = socket.handshake.query.uuid;
 
+    function boxDestroyed() {
+        console.log("boxが破壊された！");
+    }
+
     if (!isAdmin) {
         if (!uuid) {
             console.log('❌ UUIDなし接続を拒否');
@@ -58,6 +62,7 @@ io.on('connection', (socket) => {
 
             // If destroyed, respawn after a delay
             if (boxHp <= 0) {
+                boxDestroyed();
                 setTimeout(() => {
                     boxHp = 100;
                     boxPos = { x: 0, y: 1, z: -3 }; // or randomize if you want
