@@ -70,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
         scene.appendChild(box);
     });
 
+    socket.on('getPoint', val => {
+        point += val;
+        updateHUD();
+    })
+
     // Move this inside the DOMContentLoaded callback
     AFRAME.registerComponent('damage-on-hover', {
         init: function () {
