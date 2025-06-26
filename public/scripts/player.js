@@ -5,6 +5,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const sphere = document.querySelector('#sphere');
     const status = document.querySelector('#status');
 
+    let point = 0;
+
+    //HUD
+    const MAX_POINT_FOR_HUD = HUDFC.thinkPointHUDMaxPoint();
+    const pointHUD = HUDFC.createHUDElement();
+    HUDFC.setStyle(pointHUD, HUDFC.thinkPointHUDStyle(point, MAX_POINT_FOR_HUD));
+    HUDFC.setHUDFixedPosition(pointHUD, "1vw", "1vw");
+    HUDFC.setHUDContent(pointHUD, HUDFC.thinkPointHUDContent(0));
+    document.body.appendChild(pointHUD);
+
+    function updateHUD() {
+        HUDFC.setHUDContent(pointHUD, HUDFC.thinkPointHUDContent(point));
+        HUDFC.setStyle(pointHUD, HUDFC.thinkPointHUDStyle(point, MAX_POINT_FOR_HUD));
+    }
+
     socket.on('updateBoxHp', (newHp) => {
         console.log('updateBoxHp received:', newHp);
         const currentBox = document.querySelector('#movingBox');
