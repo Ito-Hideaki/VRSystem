@@ -21,6 +21,7 @@ io.on('connection', (socket) => {
 
     function boxDestroyed() {
         console.log("boxが破壊された！");
+        io.emit('getPoint', 1);
     }
 
     if (!isAdmin) {
