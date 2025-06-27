@@ -13,7 +13,7 @@
 
 <body>
     <div id="status">📡 接続中...</div>
-    <a-scene embedded>
+    <a-scene>
         <a-assets>
             <img id="space" src="assets/sky.jpg" />
             <img id="earth" src="assets/ocean.jpg" />
@@ -21,11 +21,14 @@
 
         <a-entity camera look-controls raycaster="objects: .clickable">
             <a-cursor color="red"></a-cursor>
-    </a-entity>
+            <a-entity id="hud">
+                <a-text id="damageText" value="Damage: 0" color="yellow" align="center"></a-text>
+            </a-entity>
         </a-entity>
-    </a-scene>
 
-    <div id="hud"></div>
+        <a-sky id="sphere" src="#space" radius="5000"></a-sky>
+
+    </a-scene>
 </body>
 
 </html>
