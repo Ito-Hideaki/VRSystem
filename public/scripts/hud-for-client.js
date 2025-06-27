@@ -1,35 +1,28 @@
 var HUDFC /* HUD For Client */ = (() => {
     return {
         createHUDElement: function() {
-            return document.createElement("div");
-        },
-
-        /** pointHUDのstyleを考える
-         * @return style */
-        thinkPointHUDStyle: function(point, maxPoint) {
-            const isPointMax = point >= maxPoint;
-            const gaugeLength = (isPointMax ? 1 : point / maxPoint) * 48;
-            const style = {
-                width: `${gaugeLength}vw`,
-                height: "5vw",
-                border: "solid black",
-                borderWidth: `1vw ${49 - gaugeLength}vw 1vw 1vw`,
-
-                color: "white",
-                backgroundColor: isPointMax ? "green" : "blue",
-                fontFamily: "monospace",
-                fontSize: "4vw",
-                textAlign: "left",
-                overflow: "visible",
-                textWrap: "nowrap",
-                opacity: "0.7",
-            };
-            return style;
+            return document.createElement("a-text");
         },
 
         /** @return { Number } maxPoint */
         thinkPointHUDMaxPoint: function() {
             return 20;
+        },
+
+        createPointTextHUD: function() {
+            const hud = document.createElement("a-text");
+            hud.setAttribute("color", "black");
+            hud.setAttribute("font", "dejavu");
+            hud.setAttribute("scale", "0.006 0.006 0.01");
+            return hud;
+        },
+
+        thinkPointHUDResponsivePosition: function() {
+            return {
+                x: -7 * 0.001 * document.getElementsByTagName("a-scene")[0].clientWidth / (10 + document.getElementsByTagName("a-scene")[0].clientHeight),
+                y: 13 * 0.0005,
+                z: -0.01
+            };
         },
 
         /** pointHUDのテキストを考える
@@ -50,7 +43,7 @@ var HUDFC /* HUD For Client */ = (() => {
         * @param { HTMLElement } elm
         * @param { String } content */
         setHUDContent: function( elm, content ) {
-            elm.textContent = content;
+            elm.setAttribute("value", content)
         },
 
         /** HUDの左上xy座標を設定する

@@ -8,17 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let point = 0;
 
     //HUD
-    const MAX_POINT_FOR_HUD = HUDFC.thinkPointHUDMaxPoint();
-    const pointHUD = HUDFC.createHUDElement();
-    HUDFC.setStyle(pointHUD, HUDFC.thinkPointHUDStyle(point, MAX_POINT_FOR_HUD));
-    HUDFC.setHUDFixedPosition(pointHUD, "1vw", "1vw");
-    HUDFC.setHUDContent(pointHUD, HUDFC.thinkPointHUDContent(0));
-    document.body.appendChild(pointHUD);
+    const parentHUD = document.getElementById("hud");
+    const pointTextHUD = HUDFC.createPointTextHUD();
+    HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(0));
+    parentHUD.appendChild(pointTextHUD);
 
     function updateHUD() {
-        HUDFC.setHUDContent(pointHUD, HUDFC.thinkPointHUDContent(point));
-        HUDFC.setStyle(pointHUD, HUDFC.thinkPointHUDStyle(point, MAX_POINT_FOR_HUD));
+        parentHUD.setAttribute("position", HUDFC.thinkPointHUDResponsivePosition());
+        HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(point));
     }
+
+    setInterval(updateHUD, 100);
 
     socket.on('updateBoxHp', (newHp) => {
         console.log('updateBoxHp received:', newHp);

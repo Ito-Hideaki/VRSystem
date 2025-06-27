@@ -21,8 +21,7 @@
 
         <a-entity camera look-controls raycaster="objects: .clickable">
             <a-cursor color="red"></a-cursor>
-            <a-entity id="hud">
-                <a-text id="damageText" value="Damage: 0" color="yellow" align="center"></a-text>
+            <a-entity id="hud" opacity="0.8" align="left"> <!-- scale and position will be set by player.js -->
             </a-entity>
         </a-entity>
 
