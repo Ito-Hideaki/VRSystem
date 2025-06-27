@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     HUDFC.setStyle(pointHUD, HUDFC.thinkPointHUDStyle(point, MAX_POINT_FOR_HUD));
     HUDFC.setHUDFixedPosition(pointHUD, "1vw", "1vw");
     HUDFC.setHUDContent(pointHUD, HUDFC.thinkPointHUDContent(0));
-    document.body.appendChild(pointHUD);
+    document.getElementById("hud").appendChild(pointHUD);
 
     function updateHUD() {
         HUDFC.setHUDContent(pointHUD, HUDFC.thinkPointHUDContent(point));
