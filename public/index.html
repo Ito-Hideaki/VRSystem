@@ -19,16 +19,15 @@
             <img id="earth" src="assets/ocean.jpg" />
         </a-assets>
 
-        <a-entity camera look-controls raycaster="objects: .clickable">
-            <a-cursor color="red"></a-cursor>
-            <a-entity id="hud">
-                <a-text id="damageText" value="Damage: 0" color="yellow" align="center"></a-text>
-            </a-entity>
-        </a-entity>
-
         <a-sky id="sphere" src="#space" radius="5000"></a-sky>
 
+        <a-entity camera look-controls raycaster="objects: .clickable">
+            <a-cursor color="red"></a-cursor>
+    </a-entity>
+        </a-entity>
     </a-scene>
+
+    <div id="hud"></div>
 </body>
 
 </html>
