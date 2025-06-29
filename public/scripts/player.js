@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //HUD
     const parentHUD = document.getElementById("hud");
-    const POINTHUD_Z = -10;
+    const POINTHUD_Z = -1;
     const pointTextHUD = HUDFC.createPointTextHUD(POINTHUD_Z);
     HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(0));
     parentHUD.appendChild(pointTextHUD);
