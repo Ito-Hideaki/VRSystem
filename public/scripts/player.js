@@ -5,6 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const sphere = document.querySelector('#sphere');
     const status = document.querySelector('#status');
 
+    let point = 0;
+
+    //HUD
+    const parentHUD = document.getElementById("hud");
+    const POINTHUD_Z = -1;
+    const pointTextHUD = HUDFC.createPointTextHUD(POINTHUD_Z);
+    HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(0));
+    parentHUD.appendChild(pointTextHUD);
+
+    function updateHUD() {
+        parentHUD.setAttribute("position", HUDFC.thinkPointHUDResponsivePosition(POINTHUD_Z));
+        HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(point));
+    }
+
+    setInterval(updateHUD, 100);
+
     socket.on('updateBoxHp', (newHp) => {
         console.log('updateBoxHp received:', newHp);
         const currentBox = document.querySelector('#movingBox');
@@ -54,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
         box.setAttribute('damage-on-hover', '');
         scene.appendChild(box);
     });
+
+    socket.on('getPoint', val => {
+        point += val;
+        updateHUD();
+    })
 
     // Move this inside the DOMContentLoaded callback
     AFRAME.registerComponent('damage-on-hover', {
