@@ -5,6 +5,64 @@
     <meta charset="UTF-8" />
     <title>With &lt;3 from 2J</title>
     <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <script>
+        AFRAME.registerSystem('render-order', {
+            schema: {
+                type: 'array'
+            },
+            init: function () {
+                console.log(this.el.renderer);
+                this.el.renderer.sortObjects = true;
+            },
+            update: function () {
+                this.order = {};
+
+                for (i = 0; i < this.data.length; i++) {
+                    this.order[this.data[i]] = i;
+                }
+            }
+        });
+        AFRAME.registerComponent('render-order', {
+            schema: {
+                type: 'string'
+            },
+            multiple: true,
+            init: function () {
+                this.set = this.set.bind(this);
+                this.el.addEventListener('object3dset', evt => {
+                    if (this.id !== 'nonrecursive') {
+                        evt.detail.object.traverse(this.set);
+                    }
+                });
+            },
+            update: function () {
+                if (this.id === 'nonrecursive') {
+                    this.set(this.el.object3D);
+                } else {
+                    this.el.object3D.traverse(this.set);
+                }
+            },
+            set: function (node) {
+                // String (named order).
+                node.transparent = false;
+                if (isNaN(this.data)) {
+                    node.renderOrder = this.system.order[this.data];
+                } else {
+                    node.renderOrder = parseFloat(this.data);
+                }
+                //                console.log(node);
+            }
+        });
+        AFRAME.registerComponent('render-order-recursive', {
+            init: function () {
+                this.el.addEventListener('child-attached', evt => {
+                    evt.detail.el.setAttribute('render-order', this.el.getAttribute('render-order'));
+                });
+            }
+        });
+
+        //# sourceURL=webpack:///./index.js?
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="scripts/player.js"></script>
     <script src="scripts/hud-for-client.js"></script>
@@ -13,7 +71,7 @@
 
 <body>
     <div id="status">📡 接続中...</div>
-    <a-scene>
+    <a-scene render-order="object, hud, overhud">
         <a-assets>
             <img id="space" src="assets/sky.jpg" />
             <img id="earth" src="assets/ocean.jpg" />
@@ -21,7 +79,7 @@
 
         <a-entity camera look-controls raycaster="objects: .clickable">
             <a-cursor color="red"></a-cursor>
-            <a-entity id="hud" opacity="0.8" align="left"> <!-- scale and position will be set by player.js -->
+            <a-entity id="hud" material="transparent: true; depthTest:false;" opacity="0.8" align="left" render-order="hud"> <!-- scale and position will be set by player.js -->
             </a-entity>
         </a-entity>
 

@@ -9,12 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //HUD
     const parentHUD = document.getElementById("hud");
-    const pointTextHUD = HUDFC.createPointTextHUD();
+    const POINTHUD_Z = -10;
+    const pointTextHUD = HUDFC.createPointTextHUD(POINTHUD_Z);
     HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(0));
     parentHUD.appendChild(pointTextHUD);
 
     function updateHUD() {
-        parentHUD.setAttribute("position", HUDFC.thinkPointHUDResponsivePosition());
+        parentHUD.setAttribute("position", HUDFC.thinkPointHUDResponsivePosition(POINTHUD_Z));
         HUDFC.setHUDContent(pointTextHUD, HUDFC.thinkPointHUDContent(point));
     }
 
@@ -67,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
         box.setAttribute('width', 1);
         box.setAttribute('rotation', '0 45 0');
         box.setAttribute('damage-on-hover', '');
+                box.setAttribute('render-order', 'object');
+        box.setAttribute('material', 'transparent: true; depthTest: false;')
         scene.appendChild(box);
     });
 

@@ -9,19 +9,21 @@ var HUDFC /* HUD For Client */ = (() => {
             return 20;
         },
 
-        createPointTextHUD: function() {
+        createPointTextHUD: function(z) {
+            const absZ = Math.abs(z);
             const hud = document.createElement("a-text");
             hud.setAttribute("color", "black");
             hud.setAttribute("font", "dejavu");
-            hud.setAttribute("scale", "0.006 0.006 0.01");
+            hud.setAttribute("scale", `${0.6 * absZ} ${0.6 * absZ} 1`);
             return hud;
         },
 
-        thinkPointHUDResponsivePosition: function() {
+        thinkPointHUDResponsivePosition: function(z) {
+            const absZ = Math.abs(z);
             return {
-                x: -7 * 0.001 * document.getElementsByTagName("a-scene")[0].clientWidth / (10 + document.getElementsByTagName("a-scene")[0].clientHeight),
-                y: 13 * 0.0005,
-                z: -0.01
+                x: -5 * 0.05 * absZ * document.getElementsByTagName("a-scene")[0].clientWidth / (10 + document.getElementsByTagName("a-scene")[0].clientHeight),
+                y: 5 * 0.05 * absZ,
+                z: z,
             };
         },
 
