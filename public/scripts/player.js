@@ -68,8 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
         box.setAttribute('width', 1);
         box.setAttribute('rotation', '0 45 0');
         box.setAttribute('damage-on-hover', '');
-                box.setAttribute('render-order', 'object');
-        box.setAttribute('material', 'transparent: true; depthTest: false;')
         scene.appendChild(box);
     });
 
