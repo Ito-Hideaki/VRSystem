@@ -100,10 +100,52 @@ io.on('connection', (socket) => {
     });
 });
 
-// Move the box on the server and broadcast position
+// Box movement direction vector
+let moveDir = randomDirection();
+
+function randomDirection() {
+    // Generate a random normalized direction vector (x, y, z)
+    let dx = (Math.random() - 0.5);
+    let dy = (Math.random() - 0.5) * 0.5; // less vertical movement
+    let dz = (Math.random() - 0.5);
+    // Normalize
+    const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+    return {
+        x: dx / len,
+        y: dy / len,
+        z: dz / len
+    };
+}
+
+// Move the box smoothly in a direction until hitting a boundary, then pick a new direction
 setInterval(() => {
-    if (boxPos.x > 2 || boxPos.x < -2) direction *= -1;
-    boxPos.x += 0.05 * direction;
+    // Define movement boundaries
+    const minX = -2, maxX = 2;
+    const minY = 1, maxY = 2;
+    const minZ = -4, maxZ = -2;
+
+    // Movement speed
+    const speed = 0.07;
+
+    // Move in current direction
+    boxPos.x += moveDir.x * speed;
+    boxPos.y += moveDir.y * speed;
+    boxPos.z += moveDir.z * speed;
+
+    // Check boundaries and pick new direction if needed
+    let bounced = false;
+    if (boxPos.x < minX) { boxPos.x = minX; bounced = true; }
+    if (boxPos.x > maxX) { boxPos.x = maxX; bounced = true; }
+    if (boxPos.y < minY) { boxPos.y = minY; bounced = true; }
+    if (boxPos.y > maxY) { boxPos.y = maxY; bounced = true; }
+    if (boxPos.z < minZ) { boxPos.z = minZ; bounced = true; }
+    if (boxPos.z > maxZ) { boxPos.z = maxZ; bounced = true; }
+
+    // If bounced, pick a new random direction
+    if (bounced) {
+        moveDir = randomDirection();
+    }
+
     io.emit('boxPosition', boxPos);
 }, 50);
 
