@@ -25,8 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('updateBoxHp received:', newHp);
         const currentBox = document.querySelector('#movingBox');
         if (!currentBox) return;
-        // Only update visibility here, not color
         currentBox.setAttribute('visible', newHp > 0);
+
+        // Play ding sound if damaged
+        if (newHp > 0) {
+            currentBox.emit('play-ding');
+        }
     });
 
     socket.on('connect', () => {
@@ -68,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         box.setAttribute('width', 1);
         box.setAttribute('rotation', '0 45 0');
         box.setAttribute('damage-on-hover', '');
+        // Use the new event name here
+        box.setAttribute('sound', 'src: #ding; on: play-ding; volume: 2');
+
         scene.appendChild(box);
     });
 
@@ -105,4 +112,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // Example function to call when the box is damaged
+    function onBoxDamaged() {
+        var box = document.querySelector('#damageBox');
+        if (box) {
+            box.emit('play-ding');
+        }
+        // ...other damage logic...
+    }
+
+    // Call onBoxDamaged() when appropriate in your game logic
 });
