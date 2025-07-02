@@ -74,7 +74,16 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('getPoint', val => {
         point += val;
         updateHUD();
-    })
+    });
+
+    socket.on('updatePoints', pointsObj => {
+        // Only update this player's point
+        const uuid = localStorage.getItem('uuid');
+        if (uuid && pointsObj[uuid] !== undefined) {
+            point = pointsObj[uuid];
+        }
+        updateHUD();
+    });
 
     // Move this inside the DOMContentLoaded callback
     AFRAME.registerComponent('damage-on-hover', {

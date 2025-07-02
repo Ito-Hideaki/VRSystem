@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const PORT = 1729;
-const players = {}; // uuid => { socketId, connectedAt }
+const players = {}; // uuid => { socketId, connectedAt, points }
 let boxHp = 100;
 let boxPos = { x: 0, y: 1, z: -3 };
 let direction = 1;
@@ -21,7 +21,10 @@ io.on('connection', (socket) => {
 
     function boxDestroyed() {
         console.log("boxが破壊された！");
-        io.emit('getPoint', 1);
+        if (uuid && players[uuid]) {
+            players[uuid].points = (players[uuid].points || 0) + 1;
+            io.emit('updatePoints', getAllPlayerPoints());
+        }
     }
 
     if (!isAdmin) {
@@ -34,15 +37,17 @@ io.on('connection', (socket) => {
         players[uuid] = {
             socketId: socket.id,
             connectedAt: new Date(),
+            points: players[uuid]?.points || 0
         };
 
-        // Send current box state to the new client only
+        // Send current box state and points to the new client only
         socket.emit('spawnBox', {
             id: 'movingBox',
             position: boxPos,
             color: '#4CC3D9'
         });
         socket.emit('updateBoxHp', boxHp);
+        socket.emit('updatePoints', getAllPlayerPoints());
 
         console.log(`🎮 プレイヤー接続: UUID=${uuid}, socketId=${socket.id}`);
         io.emit('updatePlayerList', Object.keys(players));
@@ -93,12 +98,23 @@ io.on('connection', (socket) => {
                 delete players[uuidToDelete];
                 console.log(`👋 プレイヤー切断: UUID=${uuidToDelete}`);
                 io.emit('updatePlayerList', Object.keys(players));
+                io.emit('updatePoints', getAllPlayerPoints());
             }
         } else {
             console.log(`👑 管理者切断: ${socket.id}`);
         }
     });
 });
+
+// Helper to get all player points
+function getAllPlayerPoints() {
+    // { uuid: points, ... }
+    const result = {};
+    for (const uuid in players) {
+        result[uuid] = players[uuid].points || 0;
+    }
+    return result;
+}
 
 // Box movement direction vector
 let moveDir = randomDirection();
