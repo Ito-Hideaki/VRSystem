@@ -43,7 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('sceneUpdate', (sceneName) => {
         console.log('🔁 シーン更新:', sceneName);
-        let textureId = sceneName === 'space' ? '#space' : '#earth';
+        let textureId;
+        if (sceneName === 'ocean') {
+            textureId = '#ocean';
+        } else if (sceneName === 'sky') {
+            textureId = '#sky';
+        } else {
+            textureId = '#sky'; // default
+        }
         sphere.setAttribute('material', 'src', textureId);
     });
 
@@ -123,4 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Call onBoxDamaged() when appropriate in your game logic
+
+    socket.on('storyProgress', (stage) => {
+        // alert(`ストーリーが進みました！ステージ: ${stage}`);
+        // You can also update the UI or trigger new events here
+    });
 });

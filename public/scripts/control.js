@@ -26,3 +26,7 @@ function updatePlayerList(playerUuids) {
         list.appendChild(li);
     });
 }
+
+function startGame() {
+    socket.emit('gameStart');
+}

@@ -73,19 +73,22 @@
     <div id="status">📡 接続中...</div>
     <a-scene render-order="object, hud, hudText">
         <a-assets>
-            <img id="space" src="assets/sky.jpg" />
-            <img id="earth" src="assets/ocean.jpg" />
-            <audio id="ding" src="assets/ding.mp3"></audio> <!-- Add your ding sound file here -->
+            <img id="sky" src="assets/sky.jpg" />
+            <img id="ocean" src="assets/ocean.jpg" />
+            <audio id="ding" src="assets/ding.mp3"></audio>
         </a-assets>
 
         <a-entity camera wasd-controls look-controls raycaster="objects: .clickable">
             <a-cursor color="red"></a-cursor>
-            <a-entity geometry="primitive: plane" material="color: yellow; opacity: 0.2; transparent: true; depthTest: false;" scale="7 0.17 1" position="0 0.25 -1" render-order="hud"></a-entity>
-            <a-entity id="hud" material="depthTest:false;" align="left" render-order="hudText"> <!-- scale and position will be set by player.js -->
+            <a-entity geometry="primitive: plane"
+                material="color: yellow; opacity: 0.2; transparent: true; depthTest: false;" scale="7 0.17 1"
+                position="0 0.25 -1" render-order="hud"></a-entity>
+            <a-entity id="hud" material="depthTest:false;" align="left" render-order="hudText">
+                <!-- scale and position will be set by player.js -->
             </a-entity>
         </a-entity>
 
-        <a-sky id="sphere" src="#space" radius="5000"></a-sky>
+        <a-sky id="sphere" src="#ocean" radius="5000"></a-sky>
 
     </a-scene>
 </body>

@@ -12,6 +12,9 @@ const players = {}; // uuid => { socketId, connectedAt, points }
 let boxHp = 100;
 let boxPos = { x: 0, y: 1, z: -3 };
 let direction = 1;
+let storyStage = 0;
+let enemiesDefeated = 0;
+const ENEMIES_TO_NEXT_STAGE = 3; // Change as needed
 
 app.use(express.static('public'));
 
@@ -24,6 +27,21 @@ io.on('connection', (socket) => {
         if (uuid && players[uuid]) {
             players[uuid].points = (players[uuid].points || 0) + 1;
             io.emit('updatePoints', getAllPlayerPoints());
+        }
+        enemiesDefeated++;
+        if (enemiesDefeated >= ENEMIES_TO_NEXT_STAGE) {
+            enemiesDefeated = 0;
+            storyStage++;
+            io.emit('storyProgress', storyStage);
+            console.log(`📖 ストーリー進行: ステージ${storyStage}`);
+
+            // Always emit the correct scene for the current stage
+            let sceneName = 'ocean';
+            if (storyStage === 1) {
+                sceneName = 'sky';
+            }
+            // Add more stages if needed
+            io.emit('sceneUpdate', sceneName);
         }
     }
 
@@ -102,6 +120,24 @@ io.on('connection', (socket) => {
             }
         } else {
             console.log(`👑 管理者切断: ${socket.id}`);
+        }
+    });
+
+    socket.on('gameStart', () => {
+        if (isAdmin) {
+            storyStage = 0;
+            enemiesDefeated = 0;
+            boxHp = 100;
+            boxPos = { x: 0, y: 1, z: -3 };
+            io.emit('sceneUpdate', 'ocean'); // Always start with ocean
+            io.emit('spawnBox', {
+                id: 'movingBox',
+                position: boxPos,
+                color: '#4CC3D9'
+            });
+            io.emit('updateBoxHp', boxHp);
+            io.emit('storyProgress', storyStage);
+            console.log('▶️ ゲーム開始');
         }
     });
 });
