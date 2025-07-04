@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const status = document.querySelector('#status');
 
     let point = 0;
+    let gameStarted = false;
 
     //HUD
     const parentHUD = document.getElementById("hud");
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('sceneUpdate', (sceneName) => {
         console.log('🔁 シーン更新:', sceneName);
+        // Set sky texture
         let textureId;
         if (sceneName === 'ocean') {
             textureId = '#ocean';
@@ -51,7 +53,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             textureId = '#sky'; // default
         }
-        sphere.setAttribute('material', 'src', textureId);
+        const sphere = document.getElementById('sphere');
+        if (textureId) {
+            sphere.removeAttribute('color');
+            sphere.setAttribute('src', textureId);
+        }
+
+        // Hide black overlay on first sceneUpdate
+        const overlay = document.getElementById('black-overlay');
+        if (overlay) overlay.style.display = 'none';
+
+        // Mark game as started so box can spawn
+        gameStarted = true;
     });
 
     socket.on('boxPosition', (pos) => {
@@ -65,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('spawnBox', (boxData) => {
+        if (!gameStarted) return; // Don't spawn box before game start
+
         const oldBox = document.querySelector(`#${boxData.id}`);
         if (oldBox) oldBox.parentNode.removeChild(oldBox);
 

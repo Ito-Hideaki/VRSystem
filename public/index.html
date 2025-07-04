@@ -71,6 +71,13 @@
 
 <body>
     <div id="status">📡 接続中...</div>
+    <div id="black-overlay" style="
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #000;
+        z-index: 9999;
+        pointer-events: all;
+    "></div>
     <a-scene render-order="object, hud, hudText">
         <a-assets>
             <img id="sky" src="assets/sky.jpg" />
@@ -89,7 +96,6 @@
         </a-entity>
 
         <a-sky id="sphere" src="#ocean" radius="5000"></a-sky>
-
     </a-scene>
 </body>
 
