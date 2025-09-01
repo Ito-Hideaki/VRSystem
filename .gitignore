@@ -103,4 +103,3 @@ InitTestScene*.unity*
 # Asset Store files
 /[Aa]ssets/*
 !/[Aa]ssets/Project/
-!/[Aa]ssets/*.meta
