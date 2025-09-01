@@ -103,6 +103,4 @@ InitTestScene*.unity*
 # Asset Store files
 /[Aa]ssets/*
 !/[Aa]ssets/Project/
-
-# Asset Large Files List
-!/[Aa]ssets/largeFileList.txt
+!/[Aa]ssets/*.meta
