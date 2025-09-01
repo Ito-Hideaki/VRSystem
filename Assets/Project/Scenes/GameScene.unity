@@ -464,6 +464,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallGenerator
   bottomWallPrefab: {fileID: 7836138769128093780, guid: 1cb3b928c2439ea4a9bba36219a7087d, type: 3}
+  wallPrefab: {fileID: 3715166651645035527, guid: 8d2f52abf799f2e4a80ba36f092096b5, type: 3}
   minecart: {fileID: 1067117699}
 --- !u!4 &484499178
 Transform:
@@ -473,12 +474,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484499176}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.75116, y: 0, z: -10.08778}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.14397, y: 0, z: -4.83851}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1941382996}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &494461326
 GameObject:
@@ -1346,6 +1347,7 @@ Transform:
   m_Children:
   - {fileID: 1492277555}
   - {fileID: 1768728522}
+  - {fileID: 484499178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2135807180
@@ -1496,7 +1498,6 @@ MeshFilter:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 484499178}
   - {fileID: 1067117704}
   - {fileID: 1277943792}
   - {fileID: 256228762}
