@@ -2,6 +2,8 @@
 
 Unityバージョン: 6000.2.0f1
 
+ファイルサイズの都合上Githubにアップロードできないファイル群はAssets/Large Filesに入れてある。カスタムパッケージとして別に配布するので、PullしたらImportすること。変更したら更新すること。
+
 触る前には以下の知識を確認すること。ただし細かいものまで全部やってるわけではない。
 
 [UnityをGitHubで共同開発するための快適な開発環境＋Tips：Ayaka Kawabe](https://qiita.com/ayakaintheclouds/items/c7022b393485db573bda)
