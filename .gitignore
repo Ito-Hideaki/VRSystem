@@ -104,4 +104,3 @@ InitTestScene*.unity*
 /[Aa]ssets/*
 !/[Aa]ssets/Project/
 !/[Aa]ssets/Project.meta
-!/[Aa]ssets/*.meta
