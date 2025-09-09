@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,11 +13,13 @@ public class WallGenerator : MonoBehaviour
     [SerializeField] GameObject wallPrefab;
     [SerializeField] GameObject minecart;
 
-    float lastWallZ = 0;
-    float lastBottomWallZ = 0;
-    float wallGenerationLimit = 1000f;
+    float lastWallZ = 300f;
+    float lastBottomWallZ = 300f;
+    float wallGenerationLimit = 300f;
     const float wallZLength = 100f;
     const float bottomWallZLength = 50f;
+
+    List<GameObject> walls = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,16 +31,23 @@ public class WallGenerator : MonoBehaviour
     void Update()
     {
         //generate walls as minecart move
-        while (lastWallZ < wallGenerationLimit + minecart.transform.position.z)
+        while (wallGenerationLimit + lastWallZ > minecart.transform.position.z)
         {
             createPolygonCaveWall();
-            lastWallZ += wallZLength;
+            lastWallZ -= wallZLength;
         }
         //generate bottom walls as previous
-        while (lastBottomWallZ < wallGenerationLimit + minecart.transform.position.z)
+        while (wallGenerationLimit + lastBottomWallZ > minecart.transform.position.z)
         {
             createBottomCaveWall();
-            lastBottomWallZ += bottomWallZLength;
+            lastBottomWallZ -= bottomWallZLength;
+        }
+
+        //delete too far walls
+        while (walls.Count > 0 && walls[0].transform.position.z > minecart.transform.position.z + wallGenerationLimit)
+        {
+            GameObject.Destroy(walls[0]);
+            walls.RemoveAt(0);
         }
     }
 
@@ -45,6 +55,7 @@ public class WallGenerator : MonoBehaviour
     {
         GameObject bottomWall = Instantiate(bottomWallPrefab) as GameObject;
         bottomWall.transform.position = new Vector3(0, -8, lastBottomWallZ);
+        walls.Add(bottomWall);
     }
 
     void createPolygonCaveWall()
@@ -62,6 +73,7 @@ public class WallGenerator : MonoBehaviour
             GameObject wall = Instantiate(wallPrefab) as GameObject;
             wall.transform.position = new Vector3(posX, posY, lastWallZ);
             wall.transform.rotation = Quaternion.Euler(0, 0, i * 360 / vertexNumber);
+            walls.Add(wall);
         }
     }
 }

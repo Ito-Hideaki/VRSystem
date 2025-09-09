@@ -22,7 +22,7 @@ public class DialogueManager : MonoBehaviour
         if(!this.DialogueDisplayJobEnd())
         {
             this.timePassedSinceLastCharacter += Time.deltaTime;
-            if (this.timePassedSinceLastCharacter > timePerCharacter)
+            if (this.currentDialogueLength != this.dialogue.Length && this.timePassedSinceLastCharacter > timePerCharacter)
             {
                 this.timePassedSinceLastCharacter -= timePerCharacter;
                 this.currentDialogueLength++;
@@ -35,16 +35,16 @@ public class DialogueManager : MonoBehaviour
     {
         this.dialogue = dialogue;
         this.currentDialogueLength = 0;
+        this.timePassedSinceLastCharacter = 0;
     }
 
     public void AddNewDialogue(string dialogue)
     {
         this.dialogue += "\r\n" + dialogue;
-        this.timePassedSinceLastCharacter = -1;
     }
 
     public bool DialogueDisplayJobEnd()
     {
-        return this.currentDialogueLength == this.dialogue.Length;
+        return (this.currentDialogueLength == this.dialogue.Length && this.timePassedSinceLastCharacter > 0.5f);
     }
 }
