@@ -2,54 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class Director : MonoBehaviour
 {
     [SerializeField] DialogueManager dialogueManager;
     [SerializeField] Minecart minecart;
+    [SerializeField] DrOhnoScript drOhnoScript;
 
     List<Order> orderQueue;
     int currentOrderIndex = 100000000;
+    float timePassedSinceCurrentOrder = 0;
     enum DirectorJob
     {
         None,
         Minecart,
-        DialogueDisplay
+        DialogueDisplay,
+        OhnoFloat,
+        OhnoChase,
+        Wait,
     }
     DirectorJob currentJob = DirectorJob.None;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        CheckOutlet();
-
         Order order;
         orderQueue = new List<Order>();
 
+        order = new Order("dialogue", "set");
+        order.SetDialogue("ふははははついにタン・イーを手に入れたぞ（棒）");
+        orderQueue.Add(order);
+
+        order = new Order("dialogue", "set");
+        order.SetDialogue("これがあればXXXやYYYさらにはZZZまで私の思うままだ（棒）");
+        orderQueue.Add(order);
+
+        order = new Order("dialogue", "set");
+        order.SetDialogue("だがこの事実を知っているお前たちは邪魔だ（棒）");
+        orderQueue.Add(order);
+
+        orderQueue.Add(new Order("ohno_float", "start"));
+
+        order = new Order("dialogue", "set");
+        order.SetDialogue("見よこれがタン・イーの力（棒）");
+        orderQueue.Add(order);
+
         orderQueue.Add(new Order("minecart", "start"));
 
-        order = new Order("dialogue", "set");
-        order.SetDialogue("どこへ行こうと言うのかね！");
+        order = new Order("wait", "default");
+        order.SetLength(1f);
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("ははは！");
+        order.SetDialogue("逃げるつもりか無駄なことを（棒）");
         orderQueue.Add(order);
 
-        order = new Order("dialogue", "add");
-        order.SetDialogue("見ろ！");
-        orderQueue.Add(order);
+        orderQueue.Add(new Order("ohno_chase", "start"));
 
-        order = new Order("dialogue", "add");
-        order.SetDialogue("人がゴミのようだ！");
-        orderQueue.Add(order);
-
-        order = new Order("dialogue", "set");
-        order.SetDialogue("３分間待ってやる");
+        order = new Order("wait", "default");
+        order.SetLength(1f);
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("目がー！　目が－！");
+        order.SetDialogue("この世界から消え去るがいい（棒）");
+        orderQueue.Add(order);
+
+        order = new Order("wait", "default");
+        order.SetLength(5f);
+        orderQueue.Add(order);
+
+        order = new Order("dialogue", "set");
+        order.SetDialogue("ぐはああ（棒）");
+        orderQueue.Add(order);
+
+        orderQueue.Add(new Order("ohno_chase", "stop"));
+
+        orderQueue.Add(new Order("ohno_float", "stop"));
+
+        order = new Order("wait", "default");
+        order.SetLength(1f);
         orderQueue.Add(order);
 
         orderQueue.Add(new Order("minecart", "stop"));
@@ -57,58 +89,83 @@ public class Director : MonoBehaviour
         currentOrderIndex = 0;
     }
 
-    void CheckOutlet()
-    {
-        if(
-            dialogueManager == null
-            || minecart == null)
-        {
-            throw new Exception();
-        } 
-    }
-
     // Update is called once per frame
     void Update()
     {
+        //progress the time
+        timePassedSinceCurrentOrder += Time.deltaTime;
+
+        //end a current job when it have finished
         if(currentJob != DirectorJob.None && PreviousOrderJobDone())
         {
             currentJob = DirectorJob.None;
             currentOrderIndex++;
         }
 
+        //start a new current job
         if(currentJob == DirectorJob.None)
         {
-            if (currentOrderIndex >= orderQueue.Count) return;
+            timePassedSinceCurrentOrder = 0;
 
+            if (currentOrderIndex >= orderQueue.Count) return;
+            
             ExecuteOrder(orderQueue[currentOrderIndex]);
         }
     }
 
     void ExecuteOrder(Order order)
     {
-        if(order.category == "dialogue")
+        switch(order.category)
         {
-            if(order.code == "add")
-            {
-                dialogueManager.AddNewDialogue(order.GetDialogue());
-            }
-            if(order.code == "set")
-            {
-                dialogueManager.SetNewDialogue(order.GetDialogue());
-            }
-            currentJob = DirectorJob.DialogueDisplay;
-        }
-        if(order.category == "minecart")
-        {
-            if(order.code == "start")
-            {
-                minecart.StartMove();
-            }
-            if(order.code == "stop")
-            {
-                minecart.StopMove();
-            }
-            currentJob = DirectorJob.Minecart;
+            case "dialogue":
+                if (order.code == "add")
+                {
+                    dialogueManager.AddNewDialogue(order.GetDialogue());
+                }
+                if (order.code == "set")
+                {
+                    dialogueManager.SetNewDialogue(order.GetDialogue());
+                }
+                currentJob = DirectorJob.DialogueDisplay;
+                break;
+            case "minecart":
+                if (order.code == "start")
+                {
+                    minecart.StartMove();
+                }
+                if (order.code == "stop")
+                {
+                    minecart.StopMove();
+                }
+                currentJob = DirectorJob.Minecart;
+                break;
+            case "ohno_float":
+                if (order.code == "start")
+                {
+                    drOhnoScript.StartFloat();
+                }
+                if (order.code == "stop")
+                {
+                    drOhnoScript.StopFloat();
+                }
+                currentJob = DirectorJob.OhnoFloat;
+                break;
+            case "ohno_chase":
+                if (order.code == "start")
+                {
+                    drOhnoScript.StartChase();
+                }
+                if (order.code == "stop")
+                {
+                    drOhnoScript.StopChase();
+                }
+                currentJob = DirectorJob.OhnoChase;
+                break;
+            case "wait":
+                currentJob = DirectorJob.Wait;
+                break;
+            default:
+                break;
         }
     }
 
@@ -118,6 +175,11 @@ public class Director : MonoBehaviour
         {
             case DirectorJob.DialogueDisplay:
                 return dialogueManager.DialogueDisplayJobEnd();
+            case DirectorJob.OhnoFloat:
+                return drOhnoScript.FloatingJobEnd();
+            case DirectorJob.Wait:
+                return orderQueue[currentOrderIndex].GetLength() <= this.timePassedSinceCurrentOrder;
+            case DirectorJob.OhnoChase:
             case DirectorJob.None:
             case DirectorJob.Minecart:
             default:

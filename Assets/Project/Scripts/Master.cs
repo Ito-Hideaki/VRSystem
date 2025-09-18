@@ -25,7 +25,8 @@ public class Order
     public readonly string code;
     public readonly string category;
     string dialogue = "";
-    string[] allowedCategories = new string[] { "default", "dialogue", "minecart" };
+    float length = 0;
+    string[] allowedCategories = new string[] { "default", "dialogue", "minecart", "ohno_float", "ohno_chase", "wait" };
 
     string[] AllowedCodes()
     {
@@ -34,8 +35,11 @@ public class Order
             case "dialogue":
                 return new string[] { "add", "set" };
             case "minecart":
+            case "ohno_float":
+            case "ohno_chase":
                 return new string[] { "start", "stop" };
             case "default":
+            case "wait":
             default:
                 return new string[] { "default" };
         }
@@ -59,5 +63,17 @@ public class Order
     {
         if (category != "dialogue") throw new Exception();
         return dialogue;
+    }
+
+    public void SetLength(float length)
+    {
+        if (category != "wait") throw new Exception();
+        this.length = length;
+    }
+
+    public float GetLength()
+    {
+        if (category != "wait") throw new Exception();
+        return this.length;
     }
 }

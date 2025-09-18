@@ -1,23 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class WallGenerator : MonoBehaviour
 {
+    public const float groundY = -8f;
 
     [SerializeField] GameObject bottomWallPrefab;
     [SerializeField] GameObject wallPrefab;
     [SerializeField] GameObject minecart;
+    [SerializeField] GameObject ceilLightPrefab;
 
     float lastWallZ = 300f;
     float lastBottomWallZ = 300f;
+    float lastCeilLightZ = 300f;
     float wallGenerationLimit = 300f;
     const float wallZLength = 100f;
     const float bottomWallZLength = 50f;
+    const float ceilLightZLength = 50f;
 
     List<GameObject> walls = new List<GameObject>();
 
@@ -42,6 +42,12 @@ public class WallGenerator : MonoBehaviour
             createBottomCaveWall();
             lastBottomWallZ -= bottomWallZLength;
         }
+        //generate ceil lights as previous
+        while (wallGenerationLimit + lastCeilLightZ > minecart.transform.position.z)
+        {
+            CreateCeilLight();
+            lastCeilLightZ -= ceilLightZLength;
+        }
 
         //delete too far walls
         while (walls.Count > 0 && walls[0].transform.position.z > minecart.transform.position.z + wallGenerationLimit)
@@ -54,7 +60,7 @@ public class WallGenerator : MonoBehaviour
     void createBottomCaveWall()
     {
         GameObject bottomWall = Instantiate(bottomWallPrefab) as GameObject;
-        bottomWall.transform.position = new Vector3(0, -8, lastBottomWallZ);
+        bottomWall.transform.position = new Vector3(0, groundY, lastBottomWallZ);
         walls.Add(bottomWall);
     }
 
@@ -72,8 +78,15 @@ public class WallGenerator : MonoBehaviour
             float posY = Mathf.Sin(angle) * radius;
             GameObject wall = Instantiate(wallPrefab) as GameObject;
             wall.transform.position = new Vector3(posX, posY, lastWallZ);
-            wall.transform.rotation = Quaternion.Euler(0, 0, i * 360 / vertexNumber);
+            wall.transform.rotation = Quaternion.Euler(0, 0, i * 360f / vertexNumber);
             walls.Add(wall);
         }
+    }
+
+    void CreateCeilLight()
+    {
+        GameObject light = Instantiate(ceilLightPrefab) as GameObject;
+        light.transform.position = new Vector3(0, 17, lastCeilLightZ);
+        walls.Add(light);
     }
 }

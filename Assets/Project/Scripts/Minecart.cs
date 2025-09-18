@@ -10,7 +10,7 @@ public class Minecart : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        this.transform.position = new Vector3(0, WallGenerator.groundY + 3, 0);
     }
 
     public void StartMove()

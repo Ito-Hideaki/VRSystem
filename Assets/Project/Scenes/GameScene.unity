@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.015
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
+  m_AmbientSkyColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 040ea8662a52c0e4ab9c0e8560ac0e54, type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: ffa95fb1e9b936b41af076ce9015cbaa, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -391,9 +391,9 @@ RectTransform:
   - {fileID: 1439249704}
   m_Father: {fileID: 256228762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -149}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 111}
   m_SizeDelta: {x: 900, y: 230}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &454798100
@@ -466,6 +466,7 @@ MonoBehaviour:
   bottomWallPrefab: {fileID: 7836138769128093780, guid: 1cb3b928c2439ea4a9bba36219a7087d, type: 3}
   wallPrefab: {fileID: 3715166651645035527, guid: 8d2f52abf799f2e4a80ba36f092096b5, type: 3}
   minecart: {fileID: 1067117699}
+  ceilLightPrefab: {fileID: 5423252428218036200, guid: 44a16176164a4eb419c893ef1ccaa448, type: 3}
 --- !u!4 &484499178
 Transform:
   m_ObjectHideFlags: 0
@@ -587,7 +588,7 @@ Transform:
   m_GameObject: {fileID: 591105716}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -632,12 +633,12 @@ Light:
   m_GameObject: {fileID: 591105716}
   m_Enabled: 1
   serializedVersion: 11
-  m_Type: 2
+  m_Type: 0
   m_Color: {r: 1, g: 0.931912, b: 0.75, a: 1}
   m_Intensity: 200
   m_Range: 300
-  m_SpotAngle: 59.83333
-  m_InnerSpotAngle: 51.635414
+  m_SpotAngle: 166.96213
+  m_InnerSpotAngle: 0
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
@@ -726,7 +727,7 @@ Transform:
   m_GameObject: {fileID: 678743119}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.00616, y: 0, z: 47.24179}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -856,9 +857,9 @@ Transform:
   m_GameObject: {fileID: 1067117699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.00616, y: 0, z: -47.24179}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 5, y: 1, z: 3}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1377524660}
   m_Father: {fileID: 678743121}
@@ -1241,6 +1242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Director
   dialogueManager: {fileID: 1492277556}
   minecart: {fileID: 1067117700}
+  drOhnoScript: {fileID: 2135807182}
 --- !u!1 &1941382995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1506,6 +1508,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2135807181}
+  - component: {fileID: 2135807182}
   m_Layer: 0
   m_Name: Dr Ohno
   m_TagString: Untagged
@@ -1522,13 +1525,26 @@ Transform:
   m_GameObject: {fileID: 2135807180}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.00616, y: -5, z: -50}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2143847928}
   m_Father: {fileID: 678743121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2135807182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135807180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2e1e1f90e116547af885b502cb09c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DrOhnoScript
+  minecart: {fileID: 1067117700}
 --- !u!1 &2143847927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,8 +1573,8 @@ Transform:
   m_GameObject: {fileID: 2143847927}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: -0.08866, y: 7.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1.5000001}
+  m_LocalPosition: {x: -0.08866, y: 3.7, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.75}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2135807181}
