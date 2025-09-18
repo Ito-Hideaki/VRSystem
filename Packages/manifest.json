@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm",
+    "com.google.xr.cardboard": "https://github.com/googlevr/cardboard-xr-plugin.git",
     "com.unity.ai.navigation": "2.0.8",
     "com.unity.collab-proxy": "2.9.1",
     "com.unity.ide.rider": "3.0.36",
