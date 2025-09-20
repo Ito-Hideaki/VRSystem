@@ -16,10 +16,9 @@ public class Director : MonoBehaviour
     enum DirectorJob
     {
         None,
-        Minecart,
+        Momentary,
         DialogueDisplay,
         OhnoFloat,
-        OhnoChase,
         Wait,
     }
     DirectorJob currentJob = DirectorJob.None;
@@ -137,7 +136,7 @@ public class Director : MonoBehaviour
                 {
                     minecart.StopMove();
                 }
-                currentJob = DirectorJob.Minecart;
+                currentJob = DirectorJob.Momentary;
                 break;
             case "ohno_float":
                 if (order.code == "start")
@@ -159,7 +158,7 @@ public class Director : MonoBehaviour
                 {
                     drOhnoScript.StopChase();
                 }
-                currentJob = DirectorJob.OhnoChase;
+                currentJob = DirectorJob.Momentary;
                 break;
             case "wait":
                 currentJob = DirectorJob.Wait;
@@ -179,9 +178,8 @@ public class Director : MonoBehaviour
                 return drOhnoScript.FloatingJobEnd();
             case DirectorJob.Wait:
                 return orderQueue[currentOrderIndex].GetLength() <= this.timePassedSinceCurrentOrder;
-            case DirectorJob.OhnoChase:
+            case DirectorJob.Momentary:
             case DirectorJob.None:
-            case DirectorJob.Minecart:
             default:
                 return true;
         }

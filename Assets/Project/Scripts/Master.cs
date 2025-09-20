@@ -26,7 +26,7 @@ public class Order
     public readonly string category;
     string dialogue = "";
     float length = 0;
-    string[] allowedCategories = new string[] { "default", "dialogue", "minecart", "ohno_float", "ohno_chase", "wait" };
+    string[] allowedCategories = new string[] { "default", "dialogue", "minecart", "ohno_float", "ohno_chase", "wait", };
 
     string[] AllowedCodes()
     {

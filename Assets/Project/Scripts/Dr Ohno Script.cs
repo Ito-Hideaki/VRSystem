@@ -5,6 +5,7 @@ using UnityEngine;
 public class DrOhnoScript : MonoBehaviour
 {
     [SerializeField] Minecart minecart;
+    [SerializeField] TangYeController tangYe;
 
     bool chasing = false;
     float floatingProportion = 0; //0~1
@@ -16,6 +17,7 @@ public class DrOhnoScript : MonoBehaviour
     Vector3 position;
     bool finallyFloating = false;
 
+    public float coordinateVelocityZ = 0;
     Vector3 floatingVelocity = Vector3.zero;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,15 +30,15 @@ public class DrOhnoScript : MonoBehaviour
     {
         tick++;
         //set floating shake
-        if(tick % 75 == 0)
+        if(tick % 300 == 0)
         {
             floatingShake.z = Random.Range(-2f, 2f);
         }
-        if (tick % 75 == 25)
+        if (tick % 300 == 100)
         {
             floatingShake.y = Random.Range(-1f, 1f);
         }
-        if (tick % 75 == 50)
+        if (tick % 300 == 200)
         {
             floatingShake.x = Random.Range(-1f, 1f);
         }
@@ -55,9 +57,13 @@ public class DrOhnoScript : MonoBehaviour
         //z chasing coordinate
         if(chasing) {
             float differenceZ = this.position.z - minecart.transform.position.z;
-            float velocityZ = (AVERAGE_DIFFERENCE_Z - differenceZ) * 5f * Time.deltaTime;
-            position.z += velocityZ;
+            coordinateVelocityZ = (AVERAGE_DIFFERENCE_Z - differenceZ) * 5f * Time.deltaTime;
+            
+        } else
+        {
+            coordinateVelocityZ = 0;
         }
+        position.z += coordinateVelocityZ;
 
         //x coordinate
         position.x = 0;
@@ -76,9 +82,6 @@ public class DrOhnoScript : MonoBehaviour
         //set actual position
         Vector3 dest = position + floatingPosition * floatingProportion;
         this.transform.Translate(dest - this.transform.position);
-
-        //rotation
-        //transform.rotation = Quaternion.Euler(floatingProportion * -50, 0, 0);
     }
 
     public void StartChase()
@@ -94,11 +97,13 @@ public class DrOhnoScript : MonoBehaviour
     public void StartFloat()
     {
         finallyFloating = true;
+        tangYe.SetStatus(TangYeController.Status.Released);
     }
 
     public void StopFloat()
     {
         finallyFloating = false;
+        tangYe.SetStatus(TangYeController.Status.Stopped);
     }
 
     public bool FloatingJobEnd()
