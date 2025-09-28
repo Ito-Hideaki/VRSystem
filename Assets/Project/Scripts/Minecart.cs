@@ -28,11 +28,10 @@ public class Minecart : MonoBehaviour
     {
         //speed control
         //accelerate if moving, deccelerate if not
-        float acceleration = (finallyMoving ? 5 : speed * -0.5f - 1) * Time.deltaTime;
-        speed = Mathf.Max(0, Mathf.Min(maxSpeed, speed + acceleration));
+        float acceleration = (finallyMoving ? 5 : speed * -0.5f - 1);
+        speed = Mathf.Max(0, Mathf.Min(maxSpeed, speed + acceleration * Time.deltaTime));
 
         //move foward
-        float delta = Time.deltaTime;
-        this.transform.Translate(0, 0, delta * -1 * speed);
+        this.transform.Translate(0, 0, Time.deltaTime * -1 * speed);
     }
 }

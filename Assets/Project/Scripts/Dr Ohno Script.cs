@@ -57,13 +57,13 @@ public class DrOhnoScript : MonoBehaviour
         //z chasing coordinate
         if(chasing) {
             float differenceZ = this.position.z - minecart.transform.position.z;
-            coordinateVelocityZ = (AVERAGE_DIFFERENCE_Z - differenceZ) * 5f * Time.deltaTime;
+            coordinateVelocityZ = (AVERAGE_DIFFERENCE_Z - differenceZ) * 5f;
             
         } else
         {
             coordinateVelocityZ = 0;
         }
-        position.z += coordinateVelocityZ;
+        position.z += coordinateVelocityZ * Time.deltaTime;
 
         //x coordinate
         position.x = 0;
@@ -71,13 +71,13 @@ public class DrOhnoScript : MonoBehaviour
         //progress floating velocity
         {
             Vector3 difference = floatingPosition - floatingShake;
-            Vector3 acceleration = -difference * 0.015f * Time.deltaTime;
-            floatingVelocity += acceleration;
+            Vector3 acceleration = -difference * 1f;
+            floatingVelocity += acceleration * Time.deltaTime;
             floatingVelocity *= (1f - Time.deltaTime * 1f);
         }
 
         //progress floating position
-        floatingPosition += floatingVelocity;
+        floatingPosition += floatingVelocity * Time.deltaTime;
 
         //set actual position
         Vector3 dest = position + floatingPosition * floatingProportion;

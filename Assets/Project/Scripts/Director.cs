@@ -30,21 +30,21 @@ public class Director : MonoBehaviour
         orderQueue = new List<Order>();
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("ふははははついにタン・イーを手に入れたぞ（棒）");
+        order.SetDialogue("ふははははついにタン・イーを手に入れたぞ");
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("これがあればXXXやYYYさらにはZZZまで私の思うままだ（棒）");
+        order.SetDialogue("これがあればXXXやYYYさらにはZZZまで私の思うままだ");
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("だがこの事実を知っているお前たちは邪魔だ（棒）");
+        order.SetDialogue("だがこの事実を知っているお前たちは邪魔だ");
         orderQueue.Add(order);
 
         orderQueue.Add(new Order("ohno_float", "start"));
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("見よこれがタン・イーの力（棒）");
+        order.SetDialogue("見よこれがタン・イーの力");
         orderQueue.Add(order);
 
         orderQueue.Add(new Order("minecart", "start"));
@@ -54,7 +54,7 @@ public class Director : MonoBehaviour
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("逃げるつもりか無駄なことを（棒）");
+        order.SetDialogue("逃げるつもりか無駄なことを");
         orderQueue.Add(order);
 
         orderQueue.Add(new Order("ohno_chase", "start"));
@@ -64,7 +64,7 @@ public class Director : MonoBehaviour
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("この世界から消え去るがいい（棒）");
+        order.SetDialogue("この世界から消え去るがいい");
         orderQueue.Add(order);
 
         order = new Order("wait", "default");
@@ -72,7 +72,7 @@ public class Director : MonoBehaviour
         orderQueue.Add(order);
 
         order = new Order("dialogue", "set");
-        order.SetDialogue("ぐはああ（棒）");
+        order.SetDialogue("ぐはああ");
         orderQueue.Add(order);
 
         orderQueue.Add(new Order("ohno_chase", "stop"));

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,6 +14,7 @@ public class TangYeController : MonoBehaviour
     Vector3 defaultPos = new Vector3(0, 3, -3); //default relative position from Dr.Ohno
     [SerializeField] DrOhnoScript drOhno;
     [SerializeField] ParticleSystem typs;
+    [SerializeField] TextMeshProUGUI debugUGUI;
 
     Vector3 velocity;
     Status status;
@@ -28,18 +30,20 @@ public class TangYeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        debugUGUI.text = Time.deltaTime.ToString();
+
         Vector3 center = drOhno.transform.position + this.defaultPos;
         Vector3 diff = center - this.transform.position;
 
         if (status == Status.Stopped) {
             //get close to center
-            velocity = Time.deltaTime * diff;
+            velocity = diff;
         }
 
         if (status == Status.Released) {
 
             //try to get close to center(Dr.Ohno)
-            velocity += Time.deltaTime * 0.01f * diff;
+            velocity += Time.deltaTime * 1f * diff;
 
             //similar to rotation
             {
@@ -49,12 +53,12 @@ public class TangYeController : MonoBehaviour
             }
 
             //accelerate if too slow, deccelerate if too fast
-            float GENERAL_SPEED = 0.01f;
-            velocity *= 1f + (GENERAL_SPEED - velocity.magnitude) * 50f * Time.deltaTime;
+            float GENERAL_SPEED = 1f;
+            velocity *= 1f + (GENERAL_SPEED - velocity.magnitude) * 1f * Time.deltaTime;
         }
 
-        this.transform.Translate(velocity);
-        this.transform.Translate(new Vector3(0, 0, drOhno.coordinateVelocityZ));
+        this.transform.Translate(velocity * Time.deltaTime);
+        this.transform.Translate(new Vector3(0, 0, drOhno.coordinateVelocityZ) * Time.deltaTime);
     }
 
     public void SetStatus(Status status)
